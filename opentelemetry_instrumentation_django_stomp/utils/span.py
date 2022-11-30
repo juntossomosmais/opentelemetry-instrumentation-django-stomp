@@ -3,8 +3,7 @@ import sys
 import typing
 
 from django.conf import settings
-from opentelemetry.sdk.trace import Span
-from opentelemetry.sdk.trace import Tracer
+from opentelemetry.sdk.trace import Span, Tracer
 from opentelemetry.semconv.trace import SpanAttributes
 from opentelemetry.trace import SpanKind
 
@@ -21,13 +20,19 @@ def enrich_span_with_host_data(span: Span):
 
 
 def enrich_span(
-    span: Span, operation: typing.Optional[str], destination: str, headers: typing.Dict, body: typing.Dict
+    span: Span,
+    operation: typing.Optional[str],
+    destination: str,
+    headers: typing.Dict,
+    body: typing.Dict,
 ) -> None:
     """Helper function add SpanAttributes"""
     attributes = {
         SpanAttributes.MESSAGING_DESTINATION: destination,
         SpanAttributes.MESSAGING_CONVERSATION_ID: str(headers.get("correlation-id")),
-        SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: sys.getsizeof(json.dumps(body)),
+        SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: sys.getsizeof(
+            json.dumps(body)
+        ),
     }
     if operation is not None:
         attributes.update({SpanAttributes.MESSAGING_OPERATION: operation})
@@ -44,7 +49,7 @@ def get_span(
     span_name: str,
     operation: typing.Optional[str] = None,
 ) -> Span:
-    """Helper function to mount span and call function to se SpanAttributes"""
+    """Helper function to mount span and call function to set SpanAttributes"""
     span = tracer.start_span(name=span_name, kind=span_kind)
     if span.is_recording():
         enrich_span(

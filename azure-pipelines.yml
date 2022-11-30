@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - opentelemetry_instrumentation_django_stomp
+      - Dockerfile
+      - Dockerfile.dev
+      - poetry.lock
+pr:
+  - main
+  - develop
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: juntossomosmais/azure-pipelines-templates
+      endpoint: github.com
+      ref: main
+
+extends:
+  template: python/library.yaml@templates

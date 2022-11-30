@@ -5,11 +5,15 @@ trigger:
   paths:
     include:
       - opentelemetry_instrumentation_django_stomp
-      - Dockerfile
-      - Dockerfile.dev
       - poetry.lock
 pr:
-  - main
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - opentelemetry_instrumentation_django_stomp
+      - poetry.lock
 
 resources:
   repositories:

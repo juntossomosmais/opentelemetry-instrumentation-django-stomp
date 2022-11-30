@@ -1,0 +1,5 @@
+# https://docs.docker.com/engine/reference/builder/#dockerignore-file
+*
+!opentelemetry_instrumentation_django_stomp
+!poetry*
+!pyproject.toml

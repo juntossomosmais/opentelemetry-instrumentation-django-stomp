@@ -1,6 +1,6 @@
 # Opentelemetry auto instrumentation for django-stomp
 
-[![Build Status](https://dev.azure.com/juntos-somos-mais-loyalty/python/_apis/build/status/juntossomosmais.django-stomp-debug-callback?branchName=main)](https://dev.azure.com/juntos-somos-mais-loyalty/python/_build/latest?definitionId=272&branchName=main)
+[//]: # ([![Build Status]&#40;https://dev.azure.com/juntos-somos-mais-loyalty/python/_apis/build/status/juntossomosmais.opentelemetry-instrumentation-django-stomp?branchName=main&#41;]&#40;https://dev.azure.com/juntos-somos-mais-loyalty/python/_build/latest?definitionId=272&branchName=main&#41;)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=juntossomosmais_opentelemetry-instrumentation-django-stomp&metric=sqale_rating&token=80cebbac184a793f8d0be7a3bbe9792f47a6ef23)](https://sonarcloud.io/summary/new_code?id=juntossomosmais_opentelemetry-instrumentation-django-stomp)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=juntossomosmais_opentelemetry-instrumentation-django-stomp&metric=coverage&token=80cebbac184a793f8d0be7a3bbe9792f47a6ef23)](https://sonarcloud.io/summary/new_code?id=juntossomosmais_opentelemetry-instrumentation-django-stomp)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=juntossomosmais_opentelemetry-instrumentation-django-stomp&metric=alert_status&token=80cebbac184a793f8d0be7a3bbe9792f47a6ef23)](https://sonarcloud.io/summary/new_code?id=juntossomosmais_opentelemetry-instrumentation-django-stomp)

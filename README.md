@@ -122,30 +122,5 @@ Consumer spans can generate up to three types:
 When the flag `OTEL_PYTHON_DJANGO_STOMP_INSTRUMENT` has `False` value traces and metrics will not be generated.
 Use this to supress the django-stomp instrumentation.
 
-#### Tests
-You can run the tests with docker
-
-```shell
-docker-compose up integration-tests
-```
-
-Or using `tox`
-
-```shell
-pipenv run tox
-```
-
-#### Lint + code formatter
-The use of `.pre-commit-config.yaml` [flake8](https://github.com/pycqa/flake8), [black](https://black.readthedocs.io/en/stable/), [isort](https://pycqa.github.io/isort/) and [pylint](https://pylint.org/). 
-
-You can run the `.pre-commit-config.yaml` with docker
-
-```shell
-docker-compose up lint-formatter
-```
-
-Or using `pre-commit`
-
-```shell
-pre-commit run --all-files
-```
+#### HOW TO CONTRIBUTE ?
+Look the [contributing](./CONTRIBUTING.md) specs

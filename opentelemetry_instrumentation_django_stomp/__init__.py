@@ -57,16 +57,14 @@ from django.conf import settings
 from opentelemetry import trace
 from opentelemetry.instrumentation.instrumentor import BaseInstrumentor
 from opentelemetry.trace import TracerProvider
-from opentelemetry.trace.span import Span
 
 from .instrumentors.consumer_instrument import ConsumerInstrument
 from .instrumentors.publisher_instrument import PublisherInstrument
 from .package import _instruments
+from .utils.shared_types import CallbackHookT
 from .version import __version__
 
 _CTX_KEY = "__otel_django_stomp_span"
-
-_CallbackHookT = typing.Optional[typing.Callable[[Span, typing.Dict, typing.Dict], None]]
 
 local_threading = threading.local()
 
@@ -94,9 +92,9 @@ class DjangoStompInstrumentor(BaseInstrumentor):
         Args:
             kwargs (Dict[str, Any])):
                 trace_provider (Optional[TracerProvider]): The tracer provider to use in open-telemetry spans.
-                publisher_hook (_CallbackHookT): The callable function to call before original function call, use
+                publisher_hook (CallbackHookT): The callable function to call before original function call, use
                 this to override or enrich the span created in main project.
-                consumer_hook (_CallbackHookT): The callable function to call before original function call, use
+                consumer_hook (CallbackHookT): The callable function to call before original function call, use
                 this to override or enrich the span created in main project.
 
         Returns:
@@ -106,8 +104,8 @@ class DjangoStompInstrumentor(BaseInstrumentor):
             return None
 
         tracer_provider: typing.Optional[TracerProvider] = kwargs.get("tracer_provider", None)
-        publisher_hook: _CallbackHookT = kwargs.get("publisher_hook", None)
-        consumer_hook: _CallbackHookT = kwargs.get("consumer_hook", None)
+        publisher_hook: CallbackHookT = kwargs.get("publisher_hook", None)
+        consumer_hook: CallbackHookT = kwargs.get("consumer_hook", None)
 
         self.__setattr__("__opentelemetry_tracer_provider", tracer_provider)
         tracer = trace.get_tracer(__name__, __version__, tracer_provider)

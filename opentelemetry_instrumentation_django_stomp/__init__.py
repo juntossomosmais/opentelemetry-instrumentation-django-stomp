@@ -85,12 +85,12 @@ class DjangoStompInstrumentor(BaseInstrumentor):
         ConsumerInstrument().uninstrument()
         PublisherInstrument().uninstrument()
 
-    def _instrument(self, **kwargs: typing.Dict[str, typing.Any]) -> None:
+    def _instrument(self, **kwargs) -> None:
         """
         Instrument function to initialize wrappers in publisher and consumer functions from django-stomp.
 
         Args:
-            kwargs (Dict[str, Any])):
+            kwargs (typing.Dict[str, typing.Any]):
                 trace_provider (Optional[TracerProvider]): The tracer provider to use in open-telemetry spans.
                 publisher_hook (CallbackHookT): The callable function to call before original function call, use
                 this to override or enrich the span created in main project.

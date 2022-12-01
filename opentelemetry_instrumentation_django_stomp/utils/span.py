@@ -3,7 +3,8 @@ import sys
 import typing
 
 from django.conf import settings
-from opentelemetry.sdk.trace import Span, Tracer
+from opentelemetry.sdk.trace import Span
+from opentelemetry.sdk.trace import Tracer
 from opentelemetry.semconv.trace import SpanAttributes
 from opentelemetry.trace import SpanKind
 
@@ -30,9 +31,7 @@ def enrich_span(
     attributes = {
         SpanAttributes.MESSAGING_DESTINATION: destination,
         SpanAttributes.MESSAGING_CONVERSATION_ID: str(headers.get("correlation-id")),
-        SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: sys.getsizeof(
-            json.dumps(body)
-        ),
+        SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: sys.getsizeof(json.dumps(body)),
     }
     if operation is not None:
         attributes.update({SpanAttributes.MESSAGING_OPERATION: operation})

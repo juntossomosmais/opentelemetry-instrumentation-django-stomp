@@ -138,7 +138,7 @@ class TestConsumerInstrument(TestConsumerBase):
         )  # to not raise StompConnectionException
 
         # Act
-        getattr(self.listener._connection, "nack")(id="x", subscription=self.listener.__dict__["_subscription_id"])
+        self.listener._connection.nack(id="x", subscription=self.listener.__dict__["_subscription_id"])
         nack_finished_span = self.get_finished_spans().by_name("NACK")
 
         # Assert

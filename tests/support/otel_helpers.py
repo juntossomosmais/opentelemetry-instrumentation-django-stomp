@@ -11,8 +11,10 @@ from opentelemetry_instrumentation_django_stomp import DjangoStompInstrumentor
 
 def get_traceparent_from_span(span):
     """Helper function to get traceparent for propagator, used to create header on publish message"""
-    traceparent_string = f"00-{format_trace_id(span.context.trace_id)}-{format_span_id(span.context.span_id)}-{span.context.trace_flags:02x}"
-    return traceparent_string
+    trace_id_formatted = format_trace_id(span.context.trace_id)
+    span_id_formatted = format_span_id(span.context.span_id)
+    trace_flags = span.context.trace_flags
+    return f"00-{trace_id_formatted}-{span_id_formatted}-{trace_flags:02x}"
 
 
 class FinishedTestSpans(list):

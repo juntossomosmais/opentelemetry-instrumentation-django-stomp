@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "opentelemetry-instrumentation-django-stomp"
+version = "0.1.0"
+description = "Opentelemetry instrumentor for django-stomp package"
+authors = ["Juntos Somos Mais <labs@juntossomosmais.com.br>"]
+readme = "README.md"
+license = "MIT"
+include = [
+    "LICENSE",
+]
+homepage = "https://github.com/juntossomosmais/opentelemetry-instrumentation-django-stomp"
+repository = "https://github.com/juntossomosmais/opentelemetry-instrumentation-django-stomp"
+keywords=["django-stomp", "stomp", "django", "opentelemetry", "instrumentation"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+Django = "*"
+django-stomp = "^5.0.0"
+opentelemetry-sdk = "^1.14.0"
+opentelemetry-api = "^1.14.0"
+opentelemetry-instrumentation = "^0.35b0"
+
+[tool.poetry.dev-dependencies]
+### Tests Runner
+tox = "^3.24.5"
+trio = "^0.22.0"
+pytest-trio = "^0.8.0"
+### Pytest: Essentials
+pytest = "^7"
+pytest-mock = "^3"
+pytest-django = "^4"
+pytest-cov = "^3"
+pytest-env = "^0"
+pytest-xdist = "*"
+### Pytest: Add-ons
+pytest-icdiff = "^0"
+pytest-clarity = "^1"
+### Format, lint, static type checker, among others
+black = "*"
+mypy = "^0"
+isort = "*"
+flake8 = "*"
+flake8-bugbear = "*"
+autoflake = "^1"
+pre-commit = "^2"
+types-requests = "*"
+
+[tool.black]
+line-length = 120
+target_version = ["py37"]
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+)
+'''
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

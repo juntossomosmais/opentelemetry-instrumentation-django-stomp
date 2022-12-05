@@ -1,0 +1,57 @@
+version: "3.9"
+
+# https://docs.docker.com/compose/compose-file/compose-file-v3/#extension-fields
+x-build: &dockerfile-dev-build
+  context: .
+  dockerfile: Dockerfile.dev
+
+services:
+
+  integration-tests:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    depends_on:
+      - broker-rabbitmq
+    command:
+      [
+        "./scripts/wait-for-it.sh",
+        "${STOMP_SERVER_HOST}:${STOMP_SERVER_PORT}",
+        "-t",
+        "120",
+        "--",
+        "./scripts/start-tests.sh",
+      ]
+    networks:
+      - instrumentationdjangostomp
+
+  lint-formatter:
+    build: *dockerfile-dev-build
+    volumes:
+      - .:/app
+    command: ["./scripts/start-formatter-lint.sh"]
+    networks:
+      - instrumentationdjangostomp
+
+  broker-activemq:
+    image: rmohr/activemq:latest
+    ports:
+      - 8161:8161
+      - 61613:61613
+    volumes:
+      - ./tests/resources/custom-activemq-conf:/opt/apache-activemq-5.15.6/conf
+    networks:
+      - instrumentationdjangostomp
+
+  broker-rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 61613:61613
+      - 15672:15672
+    volumes:
+      - ./tests/resources/custom-rabbitmq-conf:/etc/rabbitmq/
+    networks:
+      - instrumentationdjangostomp
+
+networks:
+  instrumentationdjangostomp:

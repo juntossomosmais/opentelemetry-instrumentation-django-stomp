@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opentelemetry-instrumentation-django-stomp"
-version = "0.1.0"
+version = "0.2.0"
 description = "Opentelemetry instrumentor for django-stomp package"
 authors = ["Juntos Somos Mais <labs@juntossomosmais.com.br>"]
 readme = "README.md"
@@ -16,9 +16,9 @@ keywords=["django-stomp", "stomp", "django", "opentelemetry", "instrumentation"]
 python = "^3.7"
 Django = "*"
 django-stomp = "^5.0.0"
-opentelemetry-sdk = "^1.14.0"
-opentelemetry-api = "^1.14.0"
-opentelemetry-instrumentation = "^0.35b0"
+opentelemetry-sdk = "*"
+opentelemetry-api = "*"
+opentelemetry-instrumentation = "*"
 
 [tool.poetry.dev-dependencies]
 ### Tests Runner

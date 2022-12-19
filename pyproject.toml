@@ -22,7 +22,7 @@ opentelemetry-instrumentation = "*"
 
 [tool.poetry.dev-dependencies]
 ### Tests Runner
-tox = "^3.24.5"
+tox = "^3.28.0"
 trio = "^0.22.0"
 pytest-trio = "^0.8.0"
 ### Pytest: Essentials

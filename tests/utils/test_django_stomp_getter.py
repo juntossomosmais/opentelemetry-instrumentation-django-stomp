@@ -19,7 +19,7 @@ class TestDjangoStompGetter:
         getter_result = self.django_stomp_getter.get(self.fake_carrier, self.fake_object_key)
 
         # Assert
-        assert type(getter_result) == list
+        assert type(getter_result) is list
         assert len(getter_result) == len(self.fake_carrier)
         assert getter_result[0] == self.fake_object_value
 

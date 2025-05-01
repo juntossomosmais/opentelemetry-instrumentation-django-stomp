@@ -29,8 +29,8 @@ def enrich_span(
 ) -> None:
     """Helper function add SpanAttributes"""
     attributes = {
-        SpanAttributes.MESSAGING_DESTINATION: destination,
-        SpanAttributes.MESSAGING_CONVERSATION_ID: str(headers.get("correlation-id")),
+        SpanAttributes.MESSAGING_DESTINATION_NAME: destination,
+        SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: str(headers.get("correlation-id")),
         SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: sys.getsizeof(json.dumps(body)),
     }
     if operation is not None:
@@ -58,4 +58,26 @@ def get_span(
             headers=headers,
             body=body,
         )
+    return span
+
+
+def get_messaging_ack_nack_span(
+    tracer: Tracer,
+    operation: str,  # ack or nack
+    process_span: Span,
+) -> Span:
+    """Helper function to mount span and call function to set SpanAttributes"""
+    destination = process_span._attributes.get(SpanAttributes.MESSAGING_DESTINATION_NAME, "UNKNOWN")
+    conversation_id = process_span._attributes.get(SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID, "UNKNOWN")
+    span_name = f"ack {destination}" if operation == "ack" else f"nack {destination}"
+
+    span = tracer.start_span(name=span_name, kind=SpanKind.CONSUMER)
+    if span.is_recording():
+        attributes = {
+            SpanAttributes.MESSAGING_OPERATION: operation,
+            SpanAttributes.MESSAGING_DESTINATION_NAME: destination,
+            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: conversation_id,
+        }
+        span.set_attributes(attributes)
+        enrich_span_with_host_data(span)
     return span

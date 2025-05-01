@@ -50,6 +50,7 @@ can include a span with telemetry data in this function utilization.
 .. code-block:: python
    python manage.py pubsub QUEUE_NAME callback_function_to_consume_message
 """
+
 import threading
 import typing
 

@@ -6,6 +6,7 @@ from uuid import uuid4
 from django.conf import settings as django_settings
 from django_stomp.builder import build_publisher
 from opentelemetry import trace
+from opentelemetry.semconv.trace import MessagingOperationValues
 from opentelemetry.semconv.trace import SpanAttributes
 
 from opentelemetry_instrumentation_django_stomp import DjangoStompInstrumentor
@@ -35,8 +36,9 @@ class PublisherInstrumentBase(TestBase):
 
     def expected_span_attributes(self, mock_payload_size):
         return {
-            SpanAttributes.MESSAGING_CONVERSATION_ID: self.correlation_id,
-            SpanAttributes.MESSAGING_DESTINATION: self.test_queue_name,
+            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
+            SpanAttributes.MESSAGING_DESTINATION_NAME: self.test_queue_name,
+            SpanAttributes.MESSAGING_OPERATION: str(MessagingOperationValues.PUBLISH.value),
             SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: mock_payload_size,
             SpanAttributes.NET_PEER_NAME: django_settings.STOMP_SERVER_HOST,
             SpanAttributes.NET_PEER_PORT: django_settings.STOMP_SERVER_PORT,
@@ -60,7 +62,7 @@ class TestPublisherInstrument(PublisherInstrumentBase):
         received_message = get_latest_message_from_destination_using_test_listener(self.test_queue_name)
         received_message_headers, received_message_body = received_message
         finished_spans = self.get_finished_spans()
-        publisher_span = finished_spans.by_name("PUBLISHER")
+        publisher_span = finished_spans.by_name(f"send {self.test_queue_name}")
 
         assert json.loads(received_message_body) == self.fake_payload_body
         assert received_message_headers.get("traceparent") == get_traceparent_from_span(publisher_span)
@@ -87,7 +89,7 @@ class TestPublisherInstrumentHookRaises(PublisherInstrumentBase):
         received_message = get_latest_message_from_destination_using_test_listener(self.test_queue_name)
         received_message_headers, received_message_body = received_message
         finished_spans = self.get_finished_spans()
-        publisher_span = finished_spans.by_name("PUBLISHER")
+        publisher_span = finished_spans.by_name(f"send {self.test_queue_name}")
 
         assert json.loads(received_message_body) == self.fake_payload_body
         assert received_message_headers.get("traceparent") == get_traceparent_from_span(publisher_span)
@@ -112,7 +114,7 @@ class TestPublisherInstrumentSupress(PublisherInstrumentBase):
         )
 
         # Assert
-        # getting message without create a consumer span
+        # getting a message without create a consumer span
         received_message = get_latest_message_from_destination_using_test_listener(self.test_queue_name)
         received_message_headers, received_message_body = received_message
         finished_spans = self.get_finished_spans()

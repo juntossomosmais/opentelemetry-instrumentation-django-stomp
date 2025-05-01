@@ -1,5 +1,3 @@
-version: "3.9"
-
 # https://docs.docker.com/compose/compose-file/compose-file-v3/#extension-fields
 x-build: &dockerfile-dev-build
   context: .
@@ -44,7 +42,7 @@ services:
       - instrumentationdjangostomp
 
   broker-rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:4-management
     ports:
       - 61613:61613
       - 15672:15672

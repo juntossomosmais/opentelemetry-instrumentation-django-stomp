@@ -3,3 +3,4 @@
 !opentelemetry_instrumentation_django_stomp
 !poetry*
 !pyproject.toml
+!scripts

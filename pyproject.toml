@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opentelemetry-instrumentation-django-stomp"
-version = "0.2.0"
+version = "0.3.0"
 description = "Opentelemetry instrumentor for django-stomp package"
 authors = ["Juntos Somos Mais <labs@juntossomosmais.com.br>"]
 readme = "README.md"
@@ -13,41 +13,41 @@ repository = "https://github.com/juntossomosmais/opentelemetry-instrumentation-d
 keywords=["django-stomp", "stomp", "django", "opentelemetry", "instrumentation"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.10"
 Django = "*"
-django-stomp = "^5.0.0"
+django-stomp = "^6.0.0"
 opentelemetry-sdk = "*"
 opentelemetry-api = "*"
 opentelemetry-instrumentation = "*"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 ### Tests Runner
-tox = "^3.24.5"
-trio = "^0.22.0"
-pytest-trio = "^0.8.0"
+tox = "*"
+trio = "*"
+pytest-trio = "*"
 ### Pytest: Essentials
-pytest = "^7"
-pytest-mock = "^3"
-pytest-django = "^4"
-pytest-cov = "^3"
-pytest-env = "^0"
+pytest = "*"
+pytest-mock = "*"
+pytest-django = "*"
+pytest-cov = "*"
+pytest-env = "*"
 pytest-xdist = "*"
 ### Pytest: Add-ons
-pytest-icdiff = "^0"
-pytest-clarity = "^1"
+pytest-icdiff = "*"
+pytest-clarity = "*"
 ### Format, lint, static type checker, among others
 black = "*"
-mypy = "^0"
+mypy = "*"
 isort = "*"
 flake8 = "*"
 flake8-bugbear = "*"
-autoflake = "^1"
-pre-commit = "^2"
+autoflake = "*"
+pre-commit = "*"
 types-requests = "*"
 
 [tool.black]
 line-length = 120
-target_version = ["py37"]
+target_version = ["py310"]
 include = '\.pyi?$'
 exclude = '''
 (

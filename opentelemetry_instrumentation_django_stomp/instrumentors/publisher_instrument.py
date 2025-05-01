@@ -47,7 +47,7 @@ class PublisherInstrument:
                     return wrapped(*args, **kwargs)
             except Exception as unmapped_exception:
                 _logger.warning("An exception occurred in the wrapper_publisher wrap.", exc_info=unmapped_exception)
-                return wrapped(**kwargs)
+                return wrapped(*args, **kwargs)
 
         wrapt.wrap_function_wrapper(Publisher, "_send_to_broker_without_retry_attempts", wrapper_publisher)
         wrapt.wrap_function_wrapper(Publisher, "_send_to_broker", wrapper_publisher)

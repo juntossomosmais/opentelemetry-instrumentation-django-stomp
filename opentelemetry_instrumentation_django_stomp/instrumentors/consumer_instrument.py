@@ -94,9 +94,9 @@ class ConsumerInstrument:
                     ack_nack_span.add_event(span_event_name)
                     ack_nack_span.set_status(span_status)
                     ack_nack_span.end()
-                return wrapped_function
             except Exception as unmapped_exception:
                 _logger.warning("An exception occurred while trying to set ack/nack span.", exc_info=unmapped_exception)
+            finally:
                 return wrapped_function
 
         def wrapper_nack(wrapped, instance, args, kwargs):

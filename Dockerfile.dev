@@ -6,10 +6,9 @@ RUN apt update && apt install -y git && apt clean
 WORKDIR /app
 
 # Creates an appuser and change the ownership of the application's folder
-RUN useradd appuser && chown appuser ./
-
-# Installs poetry and pip
-RUN pip install --upgrade pip && \
+RUN useradd appuser && \
+    chown appuser ./ && \
+    pip install --upgrade pip && \
     pip install poetry && \
     poetry config virtualenvs.create false --local
 

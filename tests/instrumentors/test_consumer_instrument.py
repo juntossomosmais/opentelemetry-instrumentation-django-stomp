@@ -178,6 +178,44 @@ class TestConsumerInstrument(TestConsumerBase):
             **self.span_host_attributes,
         }
 
+    def test_should_handle_exception_in_wrapper_on_message(self, mocker, caplog):
+        # Arrange
+        caplog.set_level(logging.WARNING)
+        mocker.patch(
+            "opentelemetry_instrumentation_django_stomp.instrumentors.consumer_instrument.get_span",
+            side_effect=Exception("Test exception in wrapper_on_message"),
+        )
+        original_on_message = mocker.patch.object(self.listener, "on_message", wraps=self.listener.on_message)
+
+        # Act
+        self.listener.on_message(self.fake_frame)
+        self.listener.shutdown_worker_pool()
+
+        # Assert
+        original_on_message.assert_called_once_with(self.fake_frame)
+        assert "An exception occurred in the wrapper_on_message wrap." == caplog.messages[0]
+
+    def test_should_handle_exception_in_common_ack_or_nack_span(self, mocker, caplog):
+        # Arrange
+        caplog.set_level(logging.WARNING)
+        mocker.patch(
+            "opentelemetry.trace.get_current_span", side_effect=Exception("Test exception in common_ack_or_nack_span")
+        )
+        publisher = build_publisher(f"test-publisher-{uuid4()}")
+        publisher.send(queue=self.queue_consumer_name, body=self.fake_payload_body, headers=self.fake_payload_headers)
+
+        # Act
+        start_processing(
+            self.queue_consumer_name,
+            "tests.instrumentors.test_consumer_instrument.callback_ack",
+            is_testing=True,
+        )
+
+        # Assert
+        assert any(
+            record.message == "An exception occurred while trying to set ack/nack span." for record in caplog.records
+        )
+
 
 class TestConsumerInstrumentHookRaises(TestConsumerBase):
     @staticmethod

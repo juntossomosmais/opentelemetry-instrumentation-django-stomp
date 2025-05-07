@@ -66,9 +66,9 @@ class TestSpan:
         }
 
         expected_span_attributes_message = {
-            SpanAttributes.MESSAGING_DESTINATION: test_params["destination"],
+            SpanAttributes.MESSAGING_DESTINATION_NAME: test_params["destination"],
             SpanAttributes.MESSAGING_OPERATION: test_params["operation"],
-            SpanAttributes.MESSAGING_CONVERSATION_ID: test_params["headers"].get("correlation-id"),
+            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: test_params["headers"].get("correlation-id"),
             SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: mock_payload_size,
         }
         mocked_span = mock.MagicMock()

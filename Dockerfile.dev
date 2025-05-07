@@ -1,17 +1,14 @@
-FROM python:3.7-slim
+FROM python:3.10-slim
 
-# Git is required for pre-commit
-RUN apt update
-RUN apt install -y git
+RUN apt update && apt install -y git && apt clean
 
 # Creates application directory
 WORKDIR /app
 
 # Creates an appuser and change the ownership of the application's folder
-RUN useradd appuser && chown appuser ./
-
-# Installs poetry and pip
-RUN pip install --upgrade pip && \
+RUN useradd appuser && \
+    chown appuser ./ && \
+    pip install --upgrade pip && \
     pip install poetry && \
     poetry config virtualenvs.create false --local
 

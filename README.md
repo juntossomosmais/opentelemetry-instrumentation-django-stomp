@@ -10,7 +10,7 @@
 
 This library will help you to use opentelemetry traces and metrics on [Django STOMP](https://github.com/juntossomosmais/django-stomp) usage library.
 
-![Django stomp instrumentation](docs/example.gif?raw=true)
+![Django stomp instrumentation](docs/all_trace.png?raw=true)
 
 
 ####  Installation
@@ -82,7 +82,9 @@ The `DjangoStompInstrumentor` can receive three optional parameters:
 
 :warning: The hook function will not raise an exception when an error occurs inside hook function, only a warning log is generated
 
-#### PUBLISHER example
+### Span Generated
+
+#### send {destination}
 
 With the django-stomp, we can publish a message to a broker using `publisher.send` and the instrumentator
 can include a span with telemetry data in this function utilization.
@@ -97,11 +99,11 @@ can include a span with telemetry data in this function utilization.
     )
 ```
 
-The publisher span had "PUBLISHER" name.
+The publisher span had `send {destination}` name.
 
-![publisher example](docs/publisher_example.png?raw=true)
+![publisher example](docs/send_trace.png?raw=true)
 
-#### CONSUMER example
+#### CONSUMER
 With the django-stomp, we create a simple consumer using pubsub command and the instrumentator
 can include a span with telemetry data in this function utilization.
 
@@ -111,12 +113,12 @@ can include a span with telemetry data in this function utilization.
 
 Consumer spans can generate up to three types:
 
-- CONSUMER
-![consumer example](docs/consumer_example.png?raw=true)
-- ACK
-![ack example](docs/ack_example.png?raw=true)
-- NACK
-![nack example](docs/nack_example.png?raw=true)
+- process {destination}
+![process trace](docs/process_trace.png?raw=true)
+- ack {destination}
+![ack trace](docs/ack_trace.png?raw=true)
+- nack {destination}
+![nack trace](docs/nack_trace.png?raw=true)
 
 #### Supress django-stomp traces and metrics
 When the flag `OTEL_PYTHON_DJANGO_STOMP_INSTRUMENT` has `False` value traces and metrics will not be generated.

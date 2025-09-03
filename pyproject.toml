@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "opentelemetry-instrumentation-django-stomp"
-version = "0.3.0"
+version = "0.4.0"
 description = "Opentelemetry instrumentor for django-stomp package"
 authors = ["Juntos Somos Mais <labs@juntossomosmais.com.br>"]
 readme = "README.md"

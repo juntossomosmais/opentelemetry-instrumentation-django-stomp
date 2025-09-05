@@ -8,8 +8,14 @@ from django_stomp.builder import build_listener
 from django_stomp.builder import build_publisher
 from django_stomp.execution import start_processing
 from django_stomp.services.consumer import StompFrame
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_DESTINATION_NAME
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_BODY_SIZE
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_CONVERSATION_ID
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_OPERATION_TYPE
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_SYSTEM
+from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_NAME
+from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_PORT
 from opentelemetry.semconv.trace import MessagingOperationValues
-from opentelemetry.semconv.trace import SpanAttributes
 
 from tests.support.helpers_tests import CustomFakeException
 from tests.support.helpers_tests import get_latest_message_from_destination_using_test_listener
@@ -51,9 +57,9 @@ class TestConsumerBase(TestBase):
             "message-id": str(uuid4()),
         }
         self.span_host_attributes = {
-            SpanAttributes.NET_PEER_NAME: settings.STOMP_SERVER_HOST,
-            SpanAttributes.NET_PEER_PORT: settings.STOMP_SERVER_PORT,
-            SpanAttributes.MESSAGING_SYSTEM: "rabbitmq",
+            NET_PEER_NAME: settings.STOMP_SERVER_HOST,
+            NET_PEER_PORT: settings.STOMP_SERVER_PORT,
+            MESSAGING_SYSTEM: "rabbitmq",
         }
         self.listener = build_listener(self.consumer_id, should_process_msg_on_background=True)
         self.fake_frame = StompFrame(
@@ -62,10 +68,10 @@ class TestConsumerBase(TestBase):
 
     def expected_span_attributes(self, mock_payload_size):
         return {
-            SpanAttributes.MESSAGING_DESTINATION_NAME: self.queue_consumer_name,
-            SpanAttributes.MESSAGING_OPERATION: str(MessagingOperationValues.RECEIVE.value),
-            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
-            SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: mock_payload_size,
+            MESSAGING_DESTINATION_NAME: self.queue_consumer_name,
+            MESSAGING_OPERATION_TYPE: str(MessagingOperationValues.RECEIVE.value),
+            MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
+            MESSAGING_MESSAGE_BODY_SIZE: mock_payload_size,
             **self.span_host_attributes,
         }
 
@@ -91,19 +97,19 @@ class TestConsumerInstrument(TestConsumerBase):
         )
 
         common_span_attributes = {
-            SpanAttributes.MESSAGING_DESTINATION_NAME: self.queue_consumer_name,
-            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
-            SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: mock_payload_size,
+            MESSAGING_DESTINATION_NAME: self.queue_consumer_name,
+            MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
+            MESSAGING_MESSAGE_BODY_SIZE: mock_payload_size,
             **self.span_host_attributes,
         }
 
         expected_consumer_span_attributes = {
-            SpanAttributes.MESSAGING_OPERATION: str(MessagingOperationValues.RECEIVE.value),
+            MESSAGING_OPERATION_TYPE: str(MessagingOperationValues.RECEIVE.value),
             **common_span_attributes,
         }
 
         expected_publisher_span_attributes = {
-            SpanAttributes.MESSAGING_OPERATION: str(MessagingOperationValues.PUBLISH.value),
+            MESSAGING_OPERATION_TYPE: str(MessagingOperationValues.PUBLISH.value),
             **common_span_attributes,
         }
 
@@ -150,9 +156,9 @@ class TestConsumerInstrument(TestConsumerBase):
         # Assert
         ack_finished_span = self.get_finished_spans().by_name(f"ack {self.queue_consumer_name}")
         assert dict(ack_finished_span.attributes) == {
-            SpanAttributes.MESSAGING_OPERATION: "ack",
-            SpanAttributes.MESSAGING_DESTINATION_NAME: self.fake_payload_headers.get("tshoot-destination"),
-            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: self.fake_payload_headers.get("correlation-id"),
+            MESSAGING_OPERATION_TYPE: "ack",
+            MESSAGING_DESTINATION_NAME: self.fake_payload_headers.get("tshoot-destination"),
+            MESSAGING_MESSAGE_CONVERSATION_ID: self.fake_payload_headers.get("correlation-id"),
             **self.span_host_attributes,
         }
 
@@ -172,9 +178,9 @@ class TestConsumerInstrument(TestConsumerBase):
         nack_finished_span = self.get_finished_spans().by_name(f"nack {self.queue_consumer_name}")
 
         assert dict(nack_finished_span.attributes) == {
-            SpanAttributes.MESSAGING_OPERATION: "nack",
-            SpanAttributes.MESSAGING_DESTINATION_NAME: self.fake_payload_headers.get("tshoot-destination"),
-            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: self.fake_payload_headers.get("correlation-id"),
+            MESSAGING_OPERATION_TYPE: "nack",
+            MESSAGING_DESTINATION_NAME: self.fake_payload_headers.get("tshoot-destination"),
+            MESSAGING_MESSAGE_CONVERSATION_ID: self.fake_payload_headers.get("correlation-id"),
             **self.span_host_attributes,
         }
 

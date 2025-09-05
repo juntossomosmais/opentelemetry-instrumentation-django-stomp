@@ -6,8 +6,14 @@ from uuid import uuid4
 from django.conf import settings as django_settings
 from django_stomp.builder import build_publisher
 from opentelemetry import trace
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_DESTINATION_NAME
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_BODY_SIZE
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_CONVERSATION_ID
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_OPERATION_TYPE
+from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_SYSTEM
+from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_NAME
+from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_PORT
 from opentelemetry.semconv.trace import MessagingOperationValues
-from opentelemetry.semconv.trace import SpanAttributes
 
 from opentelemetry_instrumentation_django_stomp import DjangoStompInstrumentor
 from tests.support.helpers_tests import CustomFakeException
@@ -36,13 +42,13 @@ class PublisherInstrumentBase(TestBase):
 
     def expected_span_attributes(self, mock_payload_size):
         return {
-            SpanAttributes.MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
-            SpanAttributes.MESSAGING_DESTINATION_NAME: self.test_queue_name,
-            SpanAttributes.MESSAGING_OPERATION: str(MessagingOperationValues.PUBLISH.value),
-            SpanAttributes.MESSAGING_MESSAGE_PAYLOAD_SIZE_BYTES: mock_payload_size,
-            SpanAttributes.NET_PEER_NAME: django_settings.STOMP_SERVER_HOST,
-            SpanAttributes.NET_PEER_PORT: django_settings.STOMP_SERVER_PORT,
-            SpanAttributes.MESSAGING_SYSTEM: "rabbitmq",
+            MESSAGING_MESSAGE_CONVERSATION_ID: self.correlation_id,
+            MESSAGING_DESTINATION_NAME: self.test_queue_name,
+            MESSAGING_OPERATION_TYPE: str(MessagingOperationValues.PUBLISH.value),
+            MESSAGING_MESSAGE_BODY_SIZE: mock_payload_size,
+            NET_PEER_NAME: django_settings.STOMP_SERVER_HOST,
+            NET_PEER_PORT: django_settings.STOMP_SERVER_PORT,
+            MESSAGING_SYSTEM: "rabbitmq",
         }
 
 

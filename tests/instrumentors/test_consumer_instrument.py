@@ -13,8 +13,8 @@ from opentelemetry.semconv._incubating.attributes.messaging_attributes import ME
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_CONVERSATION_ID
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_OPERATION_TYPE
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_SYSTEM
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_NAME
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_PORT
+from opentelemetry.semconv.attributes.server_attributes import SERVER_ADDRESS
+from opentelemetry.semconv.attributes.server_attributes import SERVER_PORT
 from opentelemetry.semconv.trace import MessagingOperationValues
 
 from tests.support.helpers_tests import CustomFakeException
@@ -57,8 +57,8 @@ class TestConsumerBase(TestBase):
             "message-id": str(uuid4()),
         }
         self.span_host_attributes = {
-            NET_PEER_NAME: settings.STOMP_SERVER_HOST,
-            NET_PEER_PORT: settings.STOMP_SERVER_PORT,
+            SERVER_ADDRESS: settings.STOMP_SERVER_HOST,
+            SERVER_PORT: settings.STOMP_SERVER_PORT,
             MESSAGING_SYSTEM: "rabbitmq",
         }
         self.listener = build_listener(self.consumer_id, should_process_msg_on_background=True)

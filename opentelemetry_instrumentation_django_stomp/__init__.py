@@ -82,7 +82,8 @@ class DjangoStompInstrumentor(BaseInstrumentor):
         Function to unwrap publisher and consumer functions from django-stomp
         """
         if hasattr(self, "__opentelemetry_tracer_provider"):
-            delattr(self, "__opentelemetry_tracer_provider")
+            # string form is intentional: avoids name-mangling of the attr set via __setattr__
+            delattr(self, "__opentelemetry_tracer_provider")  # noqa: B043
         ConsumerInstrument().uninstrument()
         PublisherInstrument().uninstrument()
 

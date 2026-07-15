@@ -10,8 +10,8 @@ from opentelemetry.semconv._incubating.attributes.messaging_attributes import ME
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_CONVERSATION_ID
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_OPERATION_TYPE
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_SYSTEM
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_NAME
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_PORT
+from opentelemetry.semconv.attributes.server_attributes import SERVER_ADDRESS
+from opentelemetry.semconv.attributes.server_attributes import SERVER_PORT
 from opentelemetry.trace import SpanKind
 
 
@@ -19,8 +19,8 @@ def enrich_span_with_host_data(span: Span):
     """Helper function add broker SpanAttributes"""
     system = getattr(settings, "STOMP_SYSTEM", None) or "rabbitmq"
     attributes = {
-        NET_PEER_NAME: settings.STOMP_SERVER_HOST,
-        NET_PEER_PORT: settings.STOMP_SERVER_PORT,
+        SERVER_ADDRESS: settings.STOMP_SERVER_HOST,
+        SERVER_PORT: settings.STOMP_SERVER_PORT,
         MESSAGING_SYSTEM: system,
     }
     span.set_attributes(attributes)

@@ -11,8 +11,8 @@ from opentelemetry.semconv._incubating.attributes.messaging_attributes import ME
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_CONVERSATION_ID
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_OPERATION_TYPE
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_SYSTEM
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_NAME
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_PORT
+from opentelemetry.semconv.attributes.server_attributes import SERVER_ADDRESS
+from opentelemetry.semconv.attributes.server_attributes import SERVER_PORT
 from opentelemetry.semconv.trace import MessagingOperationValues
 
 from opentelemetry_instrumentation_django_stomp import DjangoStompInstrumentor
@@ -46,8 +46,8 @@ class PublisherInstrumentBase(TestBase):
             MESSAGING_DESTINATION_NAME: self.test_queue_name,
             MESSAGING_OPERATION_TYPE: str(MessagingOperationValues.PUBLISH.value),
             MESSAGING_MESSAGE_BODY_SIZE: mock_payload_size,
-            NET_PEER_NAME: django_settings.STOMP_SERVER_HOST,
-            NET_PEER_PORT: django_settings.STOMP_SERVER_PORT,
+            SERVER_ADDRESS: django_settings.STOMP_SERVER_HOST,
+            SERVER_PORT: django_settings.STOMP_SERVER_PORT,
             MESSAGING_SYSTEM: "rabbitmq",
         }
 

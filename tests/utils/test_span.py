@@ -7,8 +7,8 @@ from opentelemetry.semconv._incubating.attributes.messaging_attributes import ME
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_MESSAGE_CONVERSATION_ID
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_OPERATION_TYPE
 from opentelemetry.semconv._incubating.attributes.messaging_attributes import MESSAGING_SYSTEM
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_NAME
-from opentelemetry.semconv._incubating.attributes.net_attributes import NET_PEER_PORT
+from opentelemetry.semconv.attributes.server_attributes import SERVER_ADDRESS
+from opentelemetry.semconv.attributes.server_attributes import SERVER_PORT
 from opentelemetry.trace import SpanKind
 
 from opentelemetry_instrumentation_django_stomp.utils.span import get_span
@@ -66,8 +66,8 @@ class TestSpan:
             settings.STOMP_SYSTEM = fake_broker_system
 
         expected_span_attributes_host = {
-            NET_PEER_NAME: fake_broker_host,
-            NET_PEER_PORT: fake_broker_port,
+            SERVER_ADDRESS: fake_broker_host,
+            SERVER_PORT: fake_broker_port,
             MESSAGING_SYSTEM: fake_broker_system or "rabbitmq",
         }
 

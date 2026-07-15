@@ -199,7 +199,7 @@ class TestConsumerInstrument(TestConsumerBase):
 
         # Assert
         original_on_message.assert_called_once_with(self.fake_frame)
-        assert "An exception occurred in the wrapper_on_message wrap." == caplog.messages[0]
+        assert caplog.messages[0] == "An exception occurred in the wrapper_on_message wrap."
 
     def test_should_handle_exception_in_common_ack_or_nack_span(self, mocker, caplog):
         # Arrange

@@ -25,3 +25,5 @@ resources:
 
 extends:
   template: python/library.yaml@templates
+  parameters:
+    PythonVersion: "~3.12"

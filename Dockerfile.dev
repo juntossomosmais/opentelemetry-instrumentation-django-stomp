@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM python:3.12-slim
 
 RUN apt update && apt install -y git && apt clean
 
@@ -8,8 +8,8 @@ WORKDIR /app
 # Creates an appuser and change the ownership of the application's folder
 RUN useradd appuser && \
     chown appuser ./ && \
-    pip install --upgrade pip && \
-    pip install poetry && \
+    pip install --only-binary=:all: --upgrade "pip==26.1.2" && \
+    pip install --only-binary=:all: "poetry==2.4.1" && \
     poetry config virtualenvs.create false --local
 
 # Copy dependency definition to cache

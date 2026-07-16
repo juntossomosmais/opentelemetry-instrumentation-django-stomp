@@ -7,8 +7,11 @@ from opentelemetry.sdk.trace import Tracer
 
 
 def with_otel_context(context: otel_context.Context, fn: typing.Callable):
-    otel_context.attach(context)
-    return fn()
+    token = otel_context.attach(context)
+    try:
+        return fn()
+    finally:
+        otel_context.detach(token)
 
 
 class TracedThreadPoolExecutor(ThreadPoolExecutor):
